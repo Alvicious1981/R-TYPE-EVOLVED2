@@ -1,0 +1,12 @@
+# Godot — archivos generados por el editor
+.godot/
+*.import
+
+# macOS
+.DS_Store
+
+# Windows
+Thumbs.db
+
+# Temporales
+*.tmp
