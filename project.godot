@@ -1,19 +1,20 @@
 ; Engine configuration file.
 ; It's best edited using the editor UI and not directly,
-; but the file format allows this.
+; since the parameters that go here are not all obvious.
 ;
 ; Format:
-;    [section] ; section goes between []
-;    param=value ; assign values to parameters
+;   [section] ; section goes between []
+;   param=value ; assign values to parameters
 
 config_version=5
 
 [application]
 
 config/name="Valkyrie-VII"
-config/run/main_scene="res://scenes/main/Main.tscn"
-config/features=PackedStringArray("4.4", "Forward Plus")
+run/main_scene="res://scenes/main/Main.tscn"
+config/features=PackedStringArray("4.5", "Forward Plus")
 config/icon="res://icon.svg"
+config/run/main_scene="res://scenes/main/Main.tscn"
 
 [autoload]
 
@@ -24,7 +25,6 @@ BulletPoolManager="*res://autoloads/bullet_pool_manager.gd"
 window/size/viewport_width=1920
 window/size/viewport_height=1080
 window/stretch/mode="canvas_items"
-window/stretch/aspect="keep"
 
 [physics]
 
@@ -33,4 +33,3 @@ window/stretch/aspect="keep"
 [rendering]
 
 textures/canvas_textures/default_texture_filter=0
-renderer/rendering_method="forward_plus"

@@ -1,4 +1,3 @@
-class_name BulletPoolManager
 extends Node
 
 # Bullet class will be typed Array[Bullet] once the Bullet scene/class is defined.
