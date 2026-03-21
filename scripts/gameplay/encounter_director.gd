@@ -6,6 +6,11 @@ const _ENEMY_SCENE: PackedScene = preload("res://scenes/entities/EnemyBase.tscn"
 const _ZANGANO_PROFILE: EnemyProfile = preload("res://resources/enemies/enemy-zangano.tres")
 const _TORRETA_SCENE: PackedScene = preload("res://scenes/entities/EnemyTorreta.tscn")
 const _TORRETA_PROFILE: EnemyProfile = preload("res://resources/enemies/enemy-torreta.tres")
+const _DREADNOUGHT_SCENE: PackedScene = preload("res://scenes/entities/EnemyDreadnought.tscn")
+const _DREADNOUGHT_PROFILE: EnemyProfile = preload("res://resources/enemies/enemy-dreadnought-explorer.tres")
+const _BOSS_FLASH_SCENE: PackedScene = preload("res://scenes/ui/BossFlash.tscn")
+
+const DREADNOUGHT_SPAWN_POS: Vector2 = Vector2(2100.0, 540.0)
 
 const PHASE1_END: float = 15.0
 const PHASE2_END: float = 30.0
@@ -25,10 +30,13 @@ var _in_transition: bool = false
 var _transition_timer: float = 0.0
 var _done: bool = false
 var _victory: bool = false
+var _dreadnought_spawned: bool = false
 
 
 func _ready() -> void:
 	RunManager.reset()
+	var boss_flash: CanvasLayer = _BOSS_FLASH_SCENE.instantiate() as CanvasLayer
+	add_child(boss_flash)
 
 
 func _process(delta: float) -> void:
@@ -45,9 +53,8 @@ func _process(delta: float) -> void:
 	_elapsed += delta
 
 	if _elapsed >= ENCOUNTER_END:
-		_done = true
-		_victory = true
-		run_complete.emit()
+		if not _dreadnought_spawned:
+			_spawn_dreadnought()
 		return
 
 	if _in_transition:
@@ -123,3 +130,18 @@ func _spawn_torreta(pos: Vector2) -> void:
 	torreta.set("profile", _TORRETA_PROFILE)
 	get_parent().add_child(torreta)
 	torreta.global_position = pos
+
+
+func _spawn_dreadnought() -> void:
+	_dreadnought_spawned = true
+	var boss: EnemyDreadnought = _DREADNOUGHT_SCENE.instantiate() as EnemyDreadnought
+	boss.profile = _DREADNOUGHT_PROFILE
+	get_parent().add_child(boss)
+	boss.global_position = DREADNOUGHT_SPAWN_POS
+	boss.dreadnought_defeated.connect(_on_dreadnought_defeated)
+
+
+func _on_dreadnought_defeated() -> void:
+	_done = true
+	_victory = true
+	run_complete.emit()
