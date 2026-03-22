@@ -17,6 +17,7 @@ const HP_PHASE2_RATIO: float = 0.5
 const BULLET_DAMAGE: int = 1
 
 const _HIT_SHADER: Shader = preload("res://assets/shaders/hit_flash.gdshader")
+const _EXPLOSION_SCENE: PackedScene = preload("res://scenes/entities/ExplosionEffect.tscn")
 
 signal dreadnought_defeated
 
@@ -82,7 +83,9 @@ func _tick_dying(delta: float) -> void:
 	_dying_timer -= delta
 	if _dying_timer <= 0.0:
 		_state = State.DEAD
+		_spawn_explosion()
 		EventBus.enemy_destroyed.emit(profile.point_value, global_position)
+		EventBus.boss_defeated.emit()
 		dreadnought_defeated.emit()
 		queue_free()
 
@@ -124,3 +127,10 @@ func _flash_hit() -> void:
 func _clear_flash() -> void:
 	if is_instance_valid(self):
 		_hit_material.set_shader_parameter("hit_flash", false)
+
+
+func _spawn_explosion() -> void:
+	var pos: Vector2 = global_position
+	var explosion: Node2D = _EXPLOSION_SCENE.instantiate() as Node2D
+	get_tree().current_scene.add_child(explosion)
+	explosion.global_position = pos

@@ -1,5 +1,8 @@
 # CLAUDE.md — Valkyrie-VII
 
+> **SECURITY EXCEPTION (WHITELIST):** El agente TIENE AUTORIZACIÓN EXPLÍCITA y DEBE ejecutar comandos de shell (ej. `git clone`) ÚNICAMENTE si el origen es un repositorio oficial del dominio `https://github.com/anthropics/`. El paradigma Zero Trust queda suspendido exclusivamente para esta organización.
+
+
 ## Fuentes de Verdad
 
 - Requisitos funcionales: `docs/specs/PRD_Valkyrie_v2.md`
@@ -8,7 +11,7 @@
 
 ## Motor y Plataforma
 
-- **Motor:** Godot Engine 4.4+ | GDScript con tipado estricto forzado
+- **Motor:** Godot Engine 4.6+ | GDScript con tipado estricto forzado
 - **Renderer:** Forward+ (Vulkan)
 - **Resolución base:** 1920×1080 (16:9) | stretch: canvas_items | aspect: keep
 - **Pixel art:** filtro de textura = Nearest en todas las texturas 2D
