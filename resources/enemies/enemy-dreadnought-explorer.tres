@@ -7,4 +7,6 @@ script = ExtResource("1")
 id = "dreadnought-explorer"
 max_hp = 20
 point_value = 500
+texture_path = "res://assets/sprites/enemies/enemy_dreadnought.png"
+display_scale = Vector2(0.08, 0.08)
 projectile_pattern = []

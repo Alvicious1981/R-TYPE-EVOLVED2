@@ -7,4 +7,6 @@ extends Resource
 @export var id: String = ""
 @export var max_hp: int = 0
 @export var point_value: int = 0
+@export var texture_path: String = ""
+@export var display_scale: Vector2 = Vector2(0.038, 0.038)
 @export var projectile_pattern: Array[Dictionary] = []

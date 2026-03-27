@@ -7,4 +7,6 @@ script = ExtResource("1")
 id = "zangano"
 max_hp = 1
 point_value = 10
+texture_path = "res://assets/sprites/enemies/enemy_zangano.png"
+display_scale = Vector2(0.03, 0.03)
 projectile_pattern = []

@@ -7,4 +7,6 @@ script = ExtResource("1")
 id = "torreta"
 max_hp = 3
 point_value = 30
+texture_path = "res://assets/sprites/enemies/enemy_torreta.png"
+display_scale = Vector2(0.035, 0.035)
 projectile_pattern = []

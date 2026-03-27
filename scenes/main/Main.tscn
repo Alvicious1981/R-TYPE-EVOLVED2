@@ -10,6 +10,7 @@
 [node name="Main" type="Node2D"]
 
 [node name="CameraShake" type="Camera2D" parent="."]
+anchor_mode = 0
 current = true
 script = ExtResource("5")
 

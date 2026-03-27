@@ -17,12 +17,15 @@ var _current_hp: int = 0
 var _fire_timer: float = 0.0
 var _hit_material: ShaderMaterial
 
-@onready var _visual: Polygon2D = $EnemyVisual
+@onready var _visual: Sprite2D = $EnemyVisual
 
 
 func _ready() -> void:
 	_current_hp = profile.max_hp
 	_fire_timer = randf_range(0.3, FIRE_INTERVAL)
+	if profile.texture_path != "":
+		_visual.texture = load(profile.texture_path) as Texture2D
+		_visual.scale = profile.display_scale
 	_hit_material = ShaderMaterial.new()
 	_hit_material.shader = _HIT_SHADER
 	_visual.material = _hit_material

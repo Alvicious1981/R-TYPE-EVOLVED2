@@ -15,15 +15,16 @@ compatibility/default_parent_skeleton_in_mesh_instance_3d=true
 [application]
 
 config/name="Valkyrie-VII"
-run/main_scene="res://scenes/main/Main.tscn"
+run/main_scene="res://scenes/ui/ShipSelect.tscn"
 config/features=PackedStringArray("4.6", "Forward Plus")
 config/icon="res://icon.svg"
-config/run/main_scene="res://scenes/main/Main.tscn"
+config/run/main_scene="res://scenes/ui/ShipSelect.tscn"
 
 [autoload]
 
 BulletPoolManager="*res://autoloads/bullet_pool_manager.gd"
 EventBus="*res://autoloads/event_bus.gd"
+GameState="*res://autoloads/game_state.gd"
 RunManager="*res://autoloads/run_manager.gd"
 
 [display]
@@ -72,6 +73,11 @@ fire={
 ui_restart={
 "deadzone": 0.5,
 "events": [Object(InputEventKey,"resource_local_to_scene":false,"resource_name":"","device":-1,"window_id":0,"alt_pressed":false,"shift_pressed":false,"ctrl_pressed":false,"meta_pressed":false,"pressed":false,"keycode":0,"physical_keycode":82,"key_label":0,"unicode":114,"location":0,"echo":false,"script":null)
+]
+}
+wave_charge={
+"deadzone": 0.5,
+"events": [Object(InputEventKey,"resource_local_to_scene":false,"resource_name":"","device":-1,"window_id":0,"alt_pressed":false,"shift_pressed":false,"ctrl_pressed":false,"meta_pressed":false,"pressed":false,"keycode":0,"physical_keycode":88,"key_label":0,"unicode":120,"location":0,"echo":false,"script":null)
 ]
 }
 

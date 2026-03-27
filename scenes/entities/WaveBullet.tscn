@@ -1,0 +1,18 @@
+[gd_scene format=3]
+
+[ext_resource type="Script" path="res://scenes/entities/wave_bullet.gd" id="1"]
+
+[sub_resource type="RectangleShape2D" id="1"]
+size = Vector2(32, 8)
+
+[node name="WaveBullet" type="Area2D"]
+collision_layer = 2
+collision_mask = 4
+script = ExtResource("1")
+
+[node name="BulletPolygon" type="Polygon2D" parent="."]
+color = Color(0.4, 0.9, 1, 1)
+polygon = PackedVector2Array(8, 0, -8, -5, -5, 0, -8, 5)
+
+[node name="BulletCollision" type="CollisionShape2D" parent="."]
+shape = SubResource("1")

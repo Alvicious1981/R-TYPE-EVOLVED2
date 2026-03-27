@@ -1,0 +1,9 @@
+[gd_resource type="Resource" script_class="ShipConfig" load_steps=2 format=3]
+
+[ext_resource type="Script" path="res://scripts/data/ship_config.gd" id="1"]
+
+[resource]
+script = ExtResource("1")
+ship_name = "LEVIATHAN-IV"
+texture_path = "res://assets/sprites/player/player_ship4.png"
+display_scale = Vector2(0.065, 0.065)
