@@ -1,7 +1,7 @@
 [gd_scene load_steps=7 format=3 uid="uid://cf2ahpmd7bvru"]
 
 [ext_resource type="PackedScene" path="res://scenes/entities/Player.tscn" id="1"]
-[ext_resource type="Script" path="res://scenes/main/background.gd" id="2"]
+[ext_resource type="PackedScene" path="res://scenes/levels/Background.tscn" id="2"]
 [ext_resource type="Script" path="res://scripts/gameplay/encounter_director.gd" id="3"]
 [ext_resource type="PackedScene" path="res://scenes/ui/HUD.tscn" id="4"]
 [ext_resource type="Script" path="res://scenes/main/camera_shake.gd" id="5"]
@@ -14,9 +14,7 @@ anchor_mode = 0
 current = true
 script = ExtResource("5")
 
-[node name="Background" type="Node2D" parent="."]
-z_index = -1
-script = ExtResource("2")
+[node name="Background" parent="." instance=ExtResource("2")]
 
 [node name="Player" parent="." instance=ExtResource("1")]
 position = Vector2(192, 540)
@@ -34,5 +32,7 @@ script = ExtResource("6")
 [node name="SFX_EnemyDeath" type="AudioStreamPlayer" parent="SfxPlayer"]
 
 [node name="SFX_PlayerDeath" type="AudioStreamPlayer" parent="SfxPlayer"]
+
+[node name="SFX_WaveCharge" type="AudioStreamPlayer" parent="SfxPlayer"]
 
 [connection signal="run_complete" from="EncounterDirector" to="HUD" method="show_run_complete"]

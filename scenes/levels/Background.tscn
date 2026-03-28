@@ -1,0 +1,51 @@
+[gd_scene load_steps=4 format=3 uid="uid://bm4starbg3kx"]
+
+[ext_resource type="Script" path="res://scenes/levels/parallax_scroller.gd" id="1"]
+
+[sub_resource type="FastNoiseLite" id="FastNoiseLite_1"]
+noise_type = 2
+frequency = 0.003
+fractal_type = 1
+fractal_octaves = 5
+fractal_lacunarity = 2.0
+fractal_gain = 0.5
+
+[sub_resource type="NoiseTexture2D" id="NoiseTexture2D_1"]
+width = 1920
+height = 1080
+seamless = true
+noise = SubResource("FastNoiseLite_1")
+
+[node name="Background" type="ParallaxBackground"]
+layer = -1
+script = ExtResource("1")
+
+[node name="BaseColor" type="ColorRect" parent="."]
+size = Vector2(1920, 1080)
+color = Color(0.02, 0.02, 0.08, 1)
+
+[node name="StarsDistant" type="ParallaxLayer" parent="."]
+motion_scale = Vector2(0.2, 0)
+motion_mirroring = Vector2(1920, 0)
+
+[node name="StarSprite" type="Sprite2D" parent="StarsDistant"]
+centered = false
+texture_filter = 1
+
+[node name="Nebula" type="ParallaxLayer" parent="."]
+motion_scale = Vector2(0.5, 0)
+motion_mirroring = Vector2(1920, 0)
+
+[node name="NebulaSprite" type="Sprite2D" parent="Nebula"]
+centered = false
+texture = SubResource("NoiseTexture2D_1")
+modulate = Color(0.55, 0.2, 1.0, 0.88)
+texture_filter = 1
+
+[node name="StarsNear" type="ParallaxLayer" parent="."]
+motion_scale = Vector2(1.0, 0)
+motion_mirroring = Vector2(1920, 0)
+
+[node name="NearSprite" type="Sprite2D" parent="StarsNear"]
+centered = false
+texture_filter = 1

@@ -3,11 +3,12 @@ class_name Player extends CharacterBody2D
 enum State { NORMAL, CHARGING, DEAD }
 
 const MAX_HP: int = 3
-const FIRE_RATE: float = 12.0
 const BULLET_SPEED: float = 600.0
 const BULLET_DAMAGE: int = 1
 const MUZZLE_OFFSET: Vector2 = Vector2(20.0, 0.0)
 
+## Tiempo mínimo de pulsación para activar el modo de carga (tap vs hold)
+const CHARGE_START_THRESHOLD: float = 0.2
 ## Umbrales de carga en segundos para L1, L2, L3
 const CHARGE_THRESHOLDS: Array[float] = [0.5, 1.0, 1.5]
 
@@ -34,10 +35,11 @@ var is_dead: bool:
 
 var _state: State = State.NORMAL
 var _current_hp: int = MAX_HP
-var _fire_timer: float = 0.0
+## Tiempo acumulado de pulsación en estado NORMAL (para detectar tap vs hold)
+var _hold_time: float = 0.0
+## Tiempo acumulado de carga en estado CHARGING
 var _charge_time: float = 0.0
 var _charge_level: int = 0
-var _is_charging: bool = false
 
 
 func _ready() -> void:
@@ -50,16 +52,13 @@ func _ready() -> void:
 func _physics_process(delta: float) -> void:
 	match _state:
 		State.DEAD:
-			if Input.is_action_just_pressed("ui_restart"):
-				get_tree().reload_current_scene()
+			pass
 		State.NORMAL:
 			_handle_movement()
-			_handle_fire(delta)
-			_handle_charge_start()
+			_handle_fire_normal(delta)
 		State.CHARGING:
 			_handle_movement()
-			_handle_fire(delta)
-			_handle_charge_accumulation(delta)
+			_handle_fire_charging(delta)
 
 
 func _handle_movement() -> void:
@@ -75,34 +74,30 @@ func _clamp_to_viewport() -> void:
 	global_position.y = clampf(global_position.y, screen_margin, screen_size.y - screen_margin)
 
 
-func _handle_fire(delta: float) -> void:
-	_fire_timer -= delta
-	if Input.is_action_pressed("fire") and _fire_timer <= 0.0:
-		_fire_timer = 1.0 / FIRE_RATE
+## Estado NORMAL: tap dispara Vulcan, hold > 0.2s activa carga
+func _handle_fire_normal(delta: float) -> void:
+	if Input.is_action_just_pressed("fire"):
 		_shoot()
+		_hold_time = 0.0
+	elif Input.is_action_pressed("fire"):
+		_hold_time += delta
+		if _hold_time >= CHARGE_START_THRESHOLD:
+			_enter_charging()
+	elif Input.is_action_just_released("fire"):
+		_hold_time = 0.0
 
 
-func _shoot() -> void:
-	var _b: Bullet = BulletPoolManager.get_bullet(
-		global_position + MUZZLE_OFFSET,
-		Vector2.RIGHT,
-		BULLET_SPEED,
-		BULLET_DAMAGE
-	)
-	EventBus.player_shoot.emit()
+func _enter_charging() -> void:
+	_state = State.CHARGING
+	_hold_time = 0.0
+	_charge_time = 0.0
+	_charge_level = 0
+	EventBus.wave_charge_started.emit()
+	print("[WaveCannon] Charging started")
 
 
-func _handle_charge_start() -> void:
-	if Input.is_action_just_pressed("wave_charge"):
-		_state = State.CHARGING
-		_charge_time = 0.0
-		_charge_level = 0
-		_is_charging = true
-		EventBus.wave_charge_started.emit()
-		print("[WaveCannon] Charging started")
-
-
-func _handle_charge_accumulation(delta: float) -> void:
+## Estado CHARGING: acumula nivel de carga; Vulcan bloqueado por diseño de FSM
+func _handle_fire_charging(delta: float) -> void:
 	_charge_time += delta
 
 	var new_level: int = 0
@@ -115,13 +110,22 @@ func _handle_charge_accumulation(delta: float) -> void:
 		EventBus.wave_charge_changed.emit(_charge_level)
 		print("[WaveCannon] Level reached: %d (%.2fs)" % [_charge_level, _charge_time])
 
-	if Input.is_action_just_released("wave_charge"):
+	if Input.is_action_just_released("fire"):
 		_release_wave_cannon()
+
+
+func _shoot() -> void:
+	var _b: Bullet = BulletPoolManager.get_bullet(
+		global_position + MUZZLE_OFFSET,
+		Vector2.RIGHT,
+		BULLET_SPEED,
+		BULLET_DAMAGE
+	)
+	EventBus.player_shoot.emit()
 
 
 func _release_wave_cannon() -> void:
 	_state = State.NORMAL
-	_is_charging = false
 
 	if _charge_level == 0:
 		EventBus.wave_cannon_cancelled.emit()
@@ -154,7 +158,7 @@ func take_damage(amount: int) -> void:
 
 func _die() -> void:
 	_state = State.DEAD
-	_is_charging = false
+	_hold_time = 0.0
 	_charge_time = 0.0
 	_charge_level = 0
 	_flash_overlay.visible = true

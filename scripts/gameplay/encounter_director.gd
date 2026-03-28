@@ -41,13 +41,11 @@ func _ready() -> void:
 
 func _process(delta: float) -> void:
 	if _done:
-		if _victory and Input.is_action_just_pressed("ui_restart"):
-			get_tree().reload_current_scene()
 		return
 
 	var player: Player = get_parent().get_node_or_null("Player") as Player
 	if player != null and player.is_dead:
-		_done = true
+		_finish_run(false)
 		return
 
 	_elapsed += delta
@@ -142,6 +140,20 @@ func _spawn_dreadnought() -> void:
 
 
 func _on_dreadnought_defeated() -> void:
+	_finish_run(true)
+
+
+func _finish_run(victory: bool) -> void:
 	_done = true
-	_victory = true
-	run_complete.emit()
+	_victory = victory
+	GameState.final_score = RunManager.current_score
+	GameState.run_victory = victory
+	if victory:
+		run_complete.emit()
+	_transition_to_results(victory)
+
+
+func _transition_to_results(victory: bool) -> void:
+	var delay: float = 2.0 if victory else 2.5
+	await get_tree().create_timer(delay).timeout
+	get_tree().change_scene_to_file("res://scenes/ui/ResultScreen.tscn")
