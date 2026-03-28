@@ -91,7 +91,15 @@ addons/         ← Plugins verificados
 
 ## Alcance Actual
 
-**Bootstrap técnico completado.** El siguiente trabajo se planifica en hitos separados (Hito 1-5 de gameplay). No implementar sistemas jugables hasta que exista un plan de hito aprobado.
+**Core Loop completado (M1–M16).** El proyecto está en **Fase 2: Escalamiento de Contenido**.
+
+Hitos completados: Bootstrap técnico (M1–M5) → Gameplay vertical slice (M6–M9) → Wave Cannon + Ships (M10–M11) → Game Feel (M12) → Parallax (M14) → Audio reactivo (M15) → TitleScreen + ResultScreen (M16).
+
+Próximos hitos: M17 (Audio real) → M18 (Force Module) → M19–M23 (Biomas, PowerUps, Enemigos, Chunks, Workshop).
+
+Ver roadmap completo: `docs/plans/phase2_expansion_roadmap.md`
+
+No implementar sistemas de Fase 2 sin un plan de hito aprobado en `docs/plans/`.
 
 ## Skills del Agente
 
@@ -100,3 +108,4 @@ Ver `.agent/skills/` para patrones de referencia:
 - `godot-fsm-pattern.md` — FSM ligera para IA
 - `godot-resource-data.md` — Arquitectura Data-Driven
 - `godot-gdscript-conventions.md` — Tipado, naming, señales, colisiones
+- `godot-procedural-generation.md` — Chunk-based level streaming y PCG (requerido para M22)
