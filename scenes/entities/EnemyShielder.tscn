@@ -1,0 +1,15 @@
+[gd_scene format=3 uid="uid://cbnowlpxkjgjo"]
+
+[ext_resource type="Script" uid="uid://bsut56sndn66o" path="res://scenes/entities/enemy_shielder.gd" id="1_it3d8"]
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_it3d8"]
+size = Vector2(44, 52)
+
+[node name="EnemyShielder" type="CharacterBody2D" unique_id=848866630]
+script = ExtResource("1_it3d8")
+
+[node name="EnemyVisual" type="Sprite2D" parent="." unique_id=1778642957]
+scale = Vector2(0.038, 0.038)
+
+[node name="EnemyCollision" type="CollisionShape2D" parent="." unique_id=937680421]
+shape = SubResource("RectangleShape2D_it3d8")

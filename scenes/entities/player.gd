@@ -44,6 +44,15 @@ var _hold_time: float = 0.0
 var _charge_time: float = 0.0
 var _charge_level: int = 0
 
+## M20 — Power-Up state
+var _base_normal_speed: float = 0.0
+var _rapid_fire_active: bool = false
+var _rapid_fire_timer: float = 0.0
+var _has_shield: bool = false
+var _wave_amp_active: bool = false
+
+const RAPID_FIRE_INTERVAL: float = 0.15
+
 
 func _ready() -> void:
 	var cfg: Resource = load(SHIP_CONFIG_PATHS[GameState.selected_ship_index]) as Resource
@@ -52,6 +61,8 @@ func _ready() -> void:
 		_ship_sprite.scale = cfg.get("display_scale") as Vector2
 	_force_module = _FORCE_SCENE.instantiate() as ForceModule
 	add_child(_force_module)
+	_base_normal_speed = normal_speed
+	add_to_group("player")
 
 
 func _physics_process(delta: float) -> void:
@@ -84,12 +95,19 @@ func _handle_fire_normal(delta: float) -> void:
 	if Input.is_action_just_pressed("fire"):
 		_shoot()
 		_hold_time = 0.0
+		_rapid_fire_timer = RAPID_FIRE_INTERVAL
 	elif Input.is_action_pressed("fire"):
 		_hold_time += delta
+		if _rapid_fire_active:
+			_rapid_fire_timer -= delta
+			if _rapid_fire_timer <= 0.0:
+				_shoot()
+				_rapid_fire_timer = RAPID_FIRE_INTERVAL
 		if _hold_time >= CHARGE_START_THRESHOLD:
 			_enter_charging()
 	elif Input.is_action_just_released("fire"):
 		_hold_time = 0.0
+		_rapid_fire_timer = RAPID_FIRE_INTERVAL
 
 
 func _enter_charging() -> void:
@@ -133,10 +151,13 @@ func _release_wave_cannon() -> void:
 	_state = State.NORMAL
 
 	if _charge_level == 0:
-		EventBus.wave_cannon_cancelled.emit()
-		print("[WaveCannon] Released too early — no fire (%.2fs)" % _charge_time)
-		_charge_time = 0.0
-		return
+		if _wave_amp_active:
+			_charge_level = 1
+		else:
+			EventBus.wave_cannon_cancelled.emit()
+			print("[WaveCannon] Released too early — no fire (%.2fs)" % _charge_time)
+			_charge_time = 0.0
+			return
 
 	var power: float = minf(_charge_time / CHARGE_THRESHOLDS[2], 1.0)
 	EventBus.wave_cannon_fired.emit(_charge_level, power)
@@ -156,6 +177,10 @@ func _release_wave_cannon() -> void:
 func take_damage(amount: int) -> void:
 	if _state == State.DEAD:
 		return
+	if _has_shield:
+		_has_shield = false
+		RunManager.notify_shield_consumed()
+		return
 	_current_hp -= amount
 	if _current_hp <= 0:
 		_die()
@@ -170,3 +195,34 @@ func _die() -> void:
 	_death_label.visible = true
 	velocity = Vector2.ZERO
 	EventBus.player_died.emit()
+
+
+## Aplica el efecto de un power-up. Llamado por RunManager.
+func apply_powerup(data: UpgradeData) -> void:
+	match data.effect_type:
+		&"pu_rapid_fire":
+			_rapid_fire_active = true
+		&"pu_speed_boost":
+			normal_speed = _base_normal_speed * data.magnitude
+		&"pu_shield_pulse":
+			_has_shield = true
+		&"pu_wave_amp":
+			_wave_amp_active = true
+		&"pu_scrap_magnet":
+			print("[Player] pu_scrap_magnet stub — M21 implementará radio de recolección")
+
+
+## Revierte el efecto de un power-up expirado. Llamado por RunManager.
+func revert_powerup(data: UpgradeData) -> void:
+	match data.effect_type:
+		&"pu_rapid_fire":
+			_rapid_fire_active = false
+			_rapid_fire_timer = 0.0
+		&"pu_speed_boost":
+			normal_speed = _base_normal_speed
+		&"pu_shield_pulse":
+			_has_shield = false
+		&"pu_wave_amp":
+			_wave_amp_active = false
+		&"pu_scrap_magnet":
+			pass

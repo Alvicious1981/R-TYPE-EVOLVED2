@@ -1,0 +1,49 @@
+[gd_scene format=3 uid="uid://ck23wy1t2ucbn"]
+
+[ext_resource type="Script" uid="uid://14ospkidy1f6" path="res://scenes/levels/level_chunk.gd" id="1_d5wj1"]
+[ext_resource type="Texture2D" uid="uid://bo7duu6d25cjq" path="res://assets/sprites/asteroid_a.png" id="2_a1d7p"]
+
+[sub_resource type="CircleShape2D" id="CircleShape2D_a1d7p"]
+radius = 52.0
+
+[sub_resource type="CircleShape2D" id="CircleShape2D_v1h8s"]
+radius = 52.0
+
+[sub_resource type="CircleShape2D" id="CircleShape2D_wf7q3"]
+radius = 52.0
+
+[node name="ChunkAsteroidA" type="Node2D" unique_id=166285218]
+script = ExtResource("1_d5wj1")
+
+[node name="AsteroidA1" type="StaticBody2D" parent="." unique_id=1285089481]
+position = Vector2(480, 260)
+collision_layer = 32
+collision_mask = 3
+
+[node name="AsteroidSprite" type="Sprite2D" parent="AsteroidA1" unique_id=1524416279]
+texture = ExtResource("2_a1d7p")
+
+[node name="AsteroidCollision" type="CollisionShape2D" parent="AsteroidA1" unique_id=898910784]
+shape = SubResource("CircleShape2D_a1d7p")
+
+[node name="AsteroidA2" type="StaticBody2D" parent="." unique_id=130768701]
+position = Vector2(960, 750)
+collision_layer = 32
+collision_mask = 3
+
+[node name="AsteroidSprite" type="Sprite2D" parent="AsteroidA2" unique_id=1997727750]
+texture = ExtResource("2_a1d7p")
+
+[node name="AsteroidCollision" type="CollisionShape2D" parent="AsteroidA2" unique_id=1331524235]
+shape = SubResource("CircleShape2D_v1h8s")
+
+[node name="AsteroidA3" type="StaticBody2D" parent="." unique_id=141088469]
+position = Vector2(1440, 480)
+collision_layer = 32
+collision_mask = 3
+
+[node name="AsteroidSprite" type="Sprite2D" parent="AsteroidA3" unique_id=444045235]
+texture = ExtResource("2_a1d7p")
+
+[node name="AsteroidCollision" type="CollisionShape2D" parent="AsteroidA3" unique_id=1564926218]
+shape = SubResource("CircleShape2D_wf7q3")

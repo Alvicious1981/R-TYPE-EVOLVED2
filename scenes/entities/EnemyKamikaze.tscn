@@ -1,0 +1,15 @@
+[gd_scene format=3 uid="uid://civg1ncee7b4k"]
+
+[ext_resource type="Script" uid="uid://daoldxkcw032v" path="res://scenes/entities/enemy_kamikaze.gd" id="1_n2qu4"]
+
+[sub_resource type="CircleShape2D" id="CircleShape2D_n2qu4"]
+radius = 20.0
+
+[node name="EnemyKamikaze" type="CharacterBody2D" unique_id=1658213718]
+script = ExtResource("1_n2qu4")
+
+[node name="EnemyVisual" type="Sprite2D" parent="." unique_id=1965975318]
+scale = Vector2(0.038, 0.038)
+
+[node name="EnemyCollision" type="CollisionShape2D" parent="." unique_id=1289943806]
+shape = SubResource("CircleShape2D_n2qu4")

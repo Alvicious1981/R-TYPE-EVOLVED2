@@ -1,0 +1,12 @@
+[gd_resource type="Resource" script_class="EnemyProfile" load_steps=2 format=3]
+
+[ext_resource type="Script" path="res://scripts/data/enemy_profile.gd" id="1"]
+
+[resource]
+script = ExtResource("1")
+id = "kamikaze"
+max_hp = 2
+point_value = 25
+texture_path = "res://assets/sprites/enemies/enemy_kamikaze.png"
+display_scale = Vector2(0.038, 0.038)
+projectile_pattern = []

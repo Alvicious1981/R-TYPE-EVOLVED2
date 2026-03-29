@@ -64,6 +64,7 @@ func take_damage(amount: int) -> void:
 	_current_hp -= amount
 	if _current_hp <= 0:
 		_spawn_explosion()
+		LootTable.try_drop(global_position, get_parent())
 		EventBus.enemy_destroyed.emit(profile.point_value, global_position)
 		queue_free()
 		return

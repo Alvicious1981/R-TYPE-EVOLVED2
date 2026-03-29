@@ -1,0 +1,25 @@
+[gd_resource type="Resource" script_class="LevelChunk" load_steps=3 format=3]
+
+[ext_resource type="Script" path="res://scripts/data/level_chunk.gd" id="1"]
+[ext_resource type="PackedScene" path="res://scenes/levels/chunks/ChunkAsteroidA.tscn" id="2"]
+
+[resource]
+script = ExtResource("1")
+chunk_type = &"breathing"
+chunk_scene = ExtResource("2")
+min_heat = 0
+max_heat = 1
+weight = 1.0
+duration_seconds = 15.0
+spawn_waves = [{
+"count": 3.0,
+"delay": 2.0,
+"enemy_id": "zangano",
+"formation": "line"
+}, {
+"count": 2.0,
+"delay": 8.0,
+"enemy_id": "zangano",
+"formation": "v"
+}]
+next_chunk_types = Array[StringName]([&"pressure", &"breathing"])

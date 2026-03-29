@@ -26,12 +26,17 @@ BulletPoolManager="*res://autoloads/bullet_pool_manager.gd"
 EventBus="*res://autoloads/event_bus.gd"
 GameState="*res://autoloads/game_state.gd"
 RunManager="*res://autoloads/run_manager.gd"
+MCPRuntimeBridge="*uid://wk2yhw3winuo"
 
 [display]
 
 window/size/viewport_width=1920
 window/size/viewport_height=1080
 window/stretch/mode="canvas_items"
+
+[editor_plugins]
+
+enabled=PackedStringArray("res://addons/godot_dotnet_mcp/plugin.cfg", "res://addons/godot_mcp/plugin.cfg")
 
 [input]
 
