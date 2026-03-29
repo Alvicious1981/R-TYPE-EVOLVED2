@@ -1,0 +1,9 @@
+[gd_resource type="Resource" script_class="ForceConfig" load_steps=2 format=3]
+
+[ext_resource type="Script" path="res://scripts/data/force_config.gd" id="1_force"]
+
+[resource]
+script = ExtResource("1_force")
+mode = 0
+energy_drain_rate = 0.0
+bounce_charge_gain = 0.5
