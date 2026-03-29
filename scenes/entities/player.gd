@@ -19,10 +19,13 @@ const SHIP_CONFIG_PATHS: Array[String] = [
 	"res://resources/ships/ship-config-4.tres",
 	"res://resources/ships/ship-config-5.tres",
 ]
+const _FORCE_SCENE: PackedScene = preload("res://scenes/entities/Force.tscn")
 
 @export var normal_speed: float = 400.0
 @export var slow_speed: float = 180.0
 @export var screen_margin: float = 24.0
+
+var _force_module: ForceModule
 
 @onready var screen_size: Vector2 = Vector2(1920.0, 1080.0)
 @onready var _flash_overlay: ColorRect = $DeathLayer/FlashOverlay
@@ -47,6 +50,8 @@ func _ready() -> void:
 	if cfg != null:
 		_ship_sprite.texture = load(cfg.get("texture_path") as String) as Texture2D
 		_ship_sprite.scale = cfg.get("display_scale") as Vector2
+	_force_module = _FORCE_SCENE.instantiate() as ForceModule
+	add_child(_force_module)
 
 
 func _physics_process(delta: float) -> void:
