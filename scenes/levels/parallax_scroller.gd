@@ -36,6 +36,16 @@ const NEAR_SPEED_FACTOR: float = 1.0     # 500 px/s — streaking foreground
 func _ready() -> void:
 	_generate_distant_stars()
 	_generate_near_stars()
+	EventBus.biome_transition_requested.connect(_on_biome_transition_requested)
+
+
+func _on_biome_transition_requested(profile: Resource) -> void:
+	var biome: BiomeProfile = profile as BiomeProfile
+	if biome == null:
+		return
+	self.modulate = biome.accent_color
+	if biome.parallax_layers.size() > 0 and biome.parallax_layers[0] != null:
+		_nebula.get_node("NebulaSprite").texture = biome.parallax_layers[0]
 
 
 func _process(delta: float) -> void:
