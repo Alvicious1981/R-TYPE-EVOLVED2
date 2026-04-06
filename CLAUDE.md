@@ -418,3 +418,61 @@ Ver `.agent/skills/` para patrones de referencia:
 Agentes especializados disponibles:
 - `godot-qa` — validar GDScript antes de commit (tipado, señales, BulletPoolManager, física Jolt)
 - `level-designer` — diseñar oleadas, formaciones, editar `encounter_director.gd`
+
+---
+
+## Herramientas MCP
+
+### godot (nivel proyecto)
+
+Registrado en `.mcp.json`. Permite ejecutar comandos Godot desde el agente.
+No modificar `.mcp.json` — contiene rutas de máquina local.
+
+### PixelLab (nivel usuario — generación de pixel art)
+
+Servicio de IA para generar sprites pixel art. Relevante para **M19**
+(reemplazar los 16 sprites placeholder de 1×1 px con arte real).
+
+**Registro único — nivel usuario (NO añadir a `.mcp.json`):**
+
+```bash
+# 1. Exportar clave en shell profile (~/.zshrc o ~/.bashrc) — NUNCA en este archivo
+export PIXELLAB_API_KEY="tu-clave-aqui"
+
+# 2. Registrar el servidor a nivel usuario
+claude mcp add pixellab https://api.pixellab.ai/mcp \
+  -t http \
+  -H "Authorization: Bearer $PIXELLAB_API_KEY"
+```
+
+> **Seguridad:** Nunca escribir la clave literal en este archivo ni en `.mcp.json`.
+> Si la clave queda expuesta, rotarla en https://pixellab.ai y actualizar el valor local.
+
+**Sprites pendientes (M19) — placeholders actuales (todos ~130 bytes, 1×1 px):**
+
+| Archivo | Ruta | Dimensiones objetivo |
+|---------|------|----------------------|
+| `player_ship1-5.png` | `assets/sprites/player/` | 32×16 px |
+| `enemy_zangano.png` | `assets/sprites/enemies/` | 16×16 px |
+| `enemy_kamikaze.png` | `assets/sprites/enemies/` | 16×16 px |
+| `enemy_shielder.png` | `assets/sprites/enemies/` | 24×20 px |
+| `enemy_torreta.png` | `assets/sprites/enemies/` | 20×20 px |
+| `enemy_dreadnought.png` | `assets/sprites/enemies/` | 64×48 px |
+| `asteroid_a.png` | `assets/sprites/` | 24×24 px |
+
+**Convenciones al generar sprites:**
+- Estilo: pixel art retro shmup — paleta ≤16 colores por sprite
+- Orientación: naves apuntan hacia la **derecha** (eje +X de Godot)
+- Fondo: **transparente** (PNG con canal alfa)
+- Filtro: importar siempre con **Nearest** en el Inspector de Godot
+- Nomenclatura: `lowercase_underscores.png`
+- Ruta de salida: `assets/sprites/<categoría>/`
+- Bioma Nebulosa (M19): paleta cyan/gris frío → ver `resources/biomes/biome_nebula.tres`
+
+**Flujo de trabajo para M19:**
+1. Verificar MCP activo: `claude mcp list` → debe aparecer `pixellab`
+2. Generar sprite con prompt: dimensiones, paleta, orientación, fondo transparente
+3. Guardar PNG en `assets/sprites/<categoría>/`
+4. En Inspector de Godot: PNG → Import → Filter: **Nearest** → Re-import
+5. Asignar textura al `.tres` correspondiente (`ShipConfig.texture`, `EnemyProfile.texture_path`)
+6. QA visual: sin artefactos de escala, hitbox coherente con nuevo sprite
