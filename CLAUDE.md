@@ -69,7 +69,7 @@ Clases Resource implementadas:
 BulletPoolManager.get_bullet(pos: Vector2, dir: Vector2, speed: float, damage: int) -> Node2D
 BulletPoolManager.return_bullet(bullet: Node2D) -> void
 BulletPoolManager.get_enemy_bullet(pos: Vector2, dir: Vector2) -> Node2D
-BulletPoolManager.get_wave_bullet(pos: Vector2, dir: Vector2, level: int) -> Node2D
+BulletPoolManager.get_wave_bullet(pos: Vector2, level: int, speed: float, damage: int) -> Node2D
 ```
 
 - Pool sizes: 2000 player bullets | 500 enemy bullets | 10 wave bullets
@@ -171,7 +171,7 @@ signal boss_defeated
 
 # Power-ups
 signal power_up_collected(upgrade: UpgradeData)
-signal power_up_expired(effect_type: String)
+signal power_up_expired(upgrade: UpgradeData)
 
 # Chunks / Nivel
 signal chunk_started(chunk: LevelChunk)
@@ -364,7 +364,7 @@ Drop rate base: 15% (configurable en `LootTable`).
 1. Crear `.tres` en `resources/upgrades/` con `UpgradeData`
 2. Definir `effect_type`, `is_temporary`, `duration`, `magnitude`
 3. Registrar en `LootTable` con peso de drop
-4. Implementar lógica de efecto en `RunManager.apply_powerup()`
+4. Implementar lógica de efecto en `Player.apply_powerup()` (invocado desde `RunManager._on_power_up_collected()`)
 5. Emitir `EventBus.power_up_collected` y `EventBus.power_up_expired`
 
 ### Agregar una nueva escena de UI
